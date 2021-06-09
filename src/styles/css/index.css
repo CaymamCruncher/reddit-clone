@@ -1,0 +1,24 @@
+:root {
+  --padding: 2rem;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+* + * {
+  margin-top: 1.5rem;
+}
+
+body {
+  font-size: 18px;
+  overflow: auto;
+}
+
+.container {
+  margin: var(--padding) auto;
+  padding: var(--padding);
+  max-width: 1000px;
+}

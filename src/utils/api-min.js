@@ -1,0 +1,1 @@
+export function getPosts(){return{title:"Sour Dough",date:new Date,author:"YeastOverLord",content:"I made this amazing sour dough",type:"text",img:!1}}

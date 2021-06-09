@@ -1,24 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import { Fragment, React } from 'react';
+import PostDashboard from './components/PostDashboard';
+import './styles/css/App.css';
+import {UserContext} from './context/UserContext';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+    <Fragment>
+      <header>
+        {/* turn into own component in the future? */}
+        <div className='container'>
+          <h1>Breaddit</h1>
+          <nav>
+            <div>
+              <input></input>
+              <button>Submit</button>
+            </div>
+            <a href='/'>Home</a>
+            <a href='/'>Popular</a>
+            <a href='/'>New</a>
+          </nav>
+        </div>
       </header>
-    </div>
+      <main>
+        <UserContext.Provider value='guest'>
+          <PostDashboard />
+        </UserContext.Provider>
+      </main>
+      <footer>
+        {/* turn into own component in the future? */}
+        <div className='container'>
+          <small>&copy;2021 Breaddit Incorporated</small>
+        </div>
+      </footer>
+    </Fragment>
   );
 }
 
