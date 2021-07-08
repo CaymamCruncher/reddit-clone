@@ -16,7 +16,7 @@ function PostDashboard() {
     <ul>
       {posts.map((post) => (
         <li>
-          <Post post={post} updateScore={updateScore} />
+          <Post post={post} key={post.id} updateScore={updateScore} />
         </li>
       ))}
     </ul>

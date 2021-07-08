@@ -1,27 +1,32 @@
+const headers = {
+	'Accept': 'application/json',
+	'Content-Type': 'application/json'
+}
+const url = 'http://localhost:5000';
+
+
 export function getPosts() {
-  return Promise.all([
-    {
-      'id': 'axsdfajfkd;as12fj;alkd318',
-      'title': 'Sour Dough',
-      'date': new Date().toLocaleString(),
-      'author': 'YeastOverLord',
-      'content': 'I like sour dough bread',
-      'type': 'text',
-      'score': 0,
-      'numOfComments': 0
-    },
-    {
-      'id': 'axsdfajfkd;a4241adsfqjbja',
-      'title': 'My first attempt at baking',
-      'date': new Date().toLocaleString(),
-      'author': 'YaBoiBread',
-      'content': 'I tried to make some bread',
-      'type': 'img',
-      'img': '/src/placeholder.jpg',
-      'score': 0,
-      'numOfComments': 0
-    }
-  ])
+  return (
+    fetch(`${url}/posts`, { headers })
+    .then((res) => res.json())
+    .catch((err) => console.warn(err))
+  );
+}
+
+export function getPost(id) {
+  return (
+    fetch(`${url}/posts/${id}`, { headers })
+    .then((res) => res.json())
+    .catch((err) => console.warn(err))
+  );
+}
+
+export function getComments(id) {
+  return (
+    fetch(`${url}/posts/${id}/comments`, { headers })
+    .then((res) => res.json())
+    .catch((err) => console.warn(err))
+  );
 }
 
 // TODO: Add users for change score functionality

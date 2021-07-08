@@ -1,5 +1,6 @@
 import {useContext} from 'react';
 import {UserContext} from '../context/UserContext';
+import {Link} from 'react-router-dom';
 
 function Post(props) {
   const {post, updateScore} = props;
@@ -13,7 +14,7 @@ function Post(props) {
   }
   return (
     <article className="container post">
-      <h2>{post.title}</h2>
+      <h2><Link to={`/posts/${post.id}`}>{post.title}</Link></h2>
       {post.type === 'img' && (
         <img alt={post.title} src="/placeholder.jpg" />
       )}
