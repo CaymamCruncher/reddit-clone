@@ -2,7 +2,7 @@ import { Fragment, React } from 'react';
 import PostDashboard from './components/PostDashboard';
 import PostView from './components/PostView';
 import './styles/css/App.css';
-import {UserContext} from './context/UserContext';
+import {UserContextProvider} from './context/UserContext';
 import { Route } from 'react-router-dom'
 
 function App() {
@@ -24,10 +24,10 @@ function App() {
         </div>
       </header>
       <main>
-        <UserContext.Provider value='guest'>
+        <UserContextProvider>
           <Route exact path='/' component={PostDashboard} />
           <Route path='/posts/:id' component={PostView} />
-        </UserContext.Provider>
+        </UserContextProvider>
       </main>
       <footer>
         {/* turn into own component in the future? */}
