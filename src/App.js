@@ -1,9 +1,10 @@
 import { Fragment, React } from 'react';
 import PostDashboard from './components/PostDashboard';
 import PostView from './components/PostView';
+import Login from './components/Login';
 import './styles/css/App.css';
 import {UserContextProvider} from './context/UserContext';
-import { Route } from 'react-router-dom'
+import { Route, Link } from 'react-router-dom'
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
             <a href='/'>Home</a>
             <a href='/'>Popular</a>
             <a href='/'>New</a>
+            <Link to='/login'>Login</Link>
           </nav>
         </div>
       </header>
@@ -27,6 +29,7 @@ function App() {
         <UserContextProvider>
           <Route exact path='/' component={PostDashboard} />
           <Route path='/posts/:id' component={PostView} />
+          <Route path='/login' component={Login} />
         </UserContextProvider>
       </main>
       <footer>

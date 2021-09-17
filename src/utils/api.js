@@ -29,8 +29,19 @@ export function getComments(id) {
   );
 }
 
+export function authenticateUser(username, password) {
+  return (
+    fetch(`${url}/users`, { method: 'POST', body: JSON.stringify({username, password}), headers })
+    .then((res) => res.json())
+    .catch((err) => console.warn(err))
+  );
+}
+
 // TODO: Add users for change score functionality
-export function changeScore(post, value) {
-  post.score += value;
-  return post;
+export function changeScore(id, value, user) {
+  return (
+    fetch(`${url}/posts/${id}`, { method: 'PUT', body: JSON.stringify({id, value, user}), headers })
+    .then((res) => res.json())
+    .catch((err) => console.warn(err))
+  );
 }

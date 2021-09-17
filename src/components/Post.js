@@ -1,17 +1,7 @@
-import {useContext} from 'react';
-import {UserContext} from '../context/UserContext';
 import {Link} from 'react-router-dom';
 
 function Post(props) {
   const {post, updateScore} = props;
-  const User = useContext(UserContext);
-  function handleUpdateScore(value) {
-    if (User !== 'guest') {
-      updateScore(value);
-    } else {
-      alert('Please login to do that');
-    }
-  }
   return (
     <article className="container post">
       <h2><Link to={`/posts/${post.id}`}>{post.title}</Link></h2>
@@ -22,9 +12,9 @@ function Post(props) {
       <p>{post.content}</p>
       <small>Number of Comments {post.numOfComments}</small>
       <small>
-        <button onClick={() => handleUpdateScore(1)}>Upvote</button>
+        <button onClick={() => updateScore(post, 1)}>Upvote</button>
         {post.score}
-        <button onClick={() => handleUpdateScore(-1)}>Downvote</button>
+        <button onClick={() => updateScore(post, -1)}>Downvote</button>
       </small>
     </article>
   )

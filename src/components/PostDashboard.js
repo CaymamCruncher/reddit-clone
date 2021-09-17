@@ -1,26 +1,35 @@
-import {useState, useEffect} from 'react';
-import { getPosts, changeScore } from '../utils/api.js';
-import Post from './Post.js';
+import { useState, useEffect, useContext } from "react";
+import { getPosts } from "../utils/api.js";
+import { UserContext } from "../context/UserContext";
+import { changeScore } from "../utils/api.js";
+import Post from "./Post.js";
 
 function PostDashboard() {
-  const [posts, updatePosts] = useState([]);
-  useEffect(() => {
-    getPosts().then((data) => updatePosts(data));
-  }, []);
+	const [posts, updatePosts] = useState([]);
+	const { user } = useContext(UserContext);
 
-  function updateScore(post, value) {
-    updatePosts(posts.map((p) => p.id === post.id ? changeScore(post, value) : p));
-  }
+	useEffect(() => {
+		console.log("rerender");
+		getPosts().then((data) => updatePosts(data));
+	}, []);
 
-  return (
-    <ul>
-      {posts.map((post) => (
-        <li>
-          <Post post={post} key={post.id} updateScore={updateScore} />
-        </li>
-      ))}
-    </ul>
-  )
+	function handleUpdateScore(post, value) {
+		if (user !== "Guest") {
+			changeScore(post.id, value, user).then((res) => updatePosts(res));
+		} else {
+			alert("Please login to do that");
+		}
+	}
+
+	return (
+		<ul>
+			{posts.map((post) => (
+				<li key={post.id}>
+					<Post post={post} updateScore={handleUpdateScore} />
+				</li>
+			))}
+		</ul>
+	);
 }
 
-export default PostDashboard
+export default PostDashboard;
