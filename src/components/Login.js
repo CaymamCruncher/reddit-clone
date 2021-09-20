@@ -13,7 +13,7 @@ function Login() {
 		e.preventDefault();
 		authenticateUser(username, password).then((res) => {
 			if (res.result) {
-				updateUser(res.user.id);
+				updateUser({ id: res.user.id, name: res.user.username });
 				alert(`Signed in as ${username}`);
 				history.goBack();
 			} else {

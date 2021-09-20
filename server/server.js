@@ -23,8 +23,7 @@ let postData = [
 		date: new Date().toLocaleString(),
 		author: "YaBoiBread",
 		content: "I tried to make some bread",
-		type: "img",
-		img: "/src/placeholder.jpg",
+		type: "text",
 		score: 0,
 		numOfComments: 1,
 	},
@@ -95,7 +94,7 @@ app.post("/posts", (req, res) => {
 app.put("/posts/:id", (req, res) => {
 	const { id, value, user } = req.body;
 	let index = postData.findIndex((p) => p.id === id);
-	let uIndex = users.findIndex((u) => u.id === user);
+	let uIndex = users.findIndex((u) => u.id === user.id);
 	let votedPosts = users[uIndex].votedPosts;
 	if (Object.keys(votedPosts).includes(id)) {
 		postData[index].score -= votedPosts[id];

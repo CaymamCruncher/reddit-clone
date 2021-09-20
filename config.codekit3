@@ -394,6 +394,17 @@
       "oAP" : "\/src\/components",
       "oF" : 0
     },
+    "\/src\/components\/AddPost.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 1,
+      "oA" : 1,
+      "oAP" : "\/src\/components\/AddPost-min.js",
+      "oF" : 0,
+      "sC" : 3,
+      "tS" : 0
+    },
     "\/src\/components\/Comment.js" : {
       "bF" : 0,
       "ft" : 64,

@@ -14,7 +14,7 @@ function PostDashboard() {
 	}, []);
 
 	function handleUpdateScore(post, value) {
-		if (user !== "Guest") {
+		if (user.id !== "Guest") {
 			changeScore(post.id, value, user).then((res) => updatePosts(res));
 		} else {
 			alert("Please login to do that");
