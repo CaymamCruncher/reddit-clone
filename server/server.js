@@ -86,6 +86,12 @@ app.get("/posts/:id", (req, res) => {
 	res.send(post);
 });
 
+app.post("/posts", (req, res) => {
+	const post = req.body;
+	postData.push(post);
+	res.send(post);
+});
+
 app.put("/posts/:id", (req, res) => {
 	const { id, value, user } = req.body;
 	let index = postData.findIndex((p) => p.id === id);
