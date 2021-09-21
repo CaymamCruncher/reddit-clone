@@ -19,7 +19,7 @@ function App() {
 							<input></input>
 							<button>Submit</button>
 						</div>
-						<a href="/">Home</a>
+						<Link to="/">Home</Link>
 						<a href="/">Popular</a>
 						<a href="/">New</a>
 						<Link to="/login">Login</Link>
