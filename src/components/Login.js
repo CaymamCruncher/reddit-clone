@@ -13,7 +13,12 @@ function Login() {
 		e.preventDefault();
 		authenticateUser(username, password).then((res) => {
 			if (res.result) {
-				updateUser({ id: res.user.id, name: res.user.username });
+				console.log(res.user);
+				updateUser({
+					id: res.user.id,
+					name: res.user.username,
+					votedPosts: res.user.votedPosts,
+				});
 				alert(`Signed in as ${username}`);
 				history.goBack();
 			} else {

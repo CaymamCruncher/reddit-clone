@@ -11,7 +11,8 @@ function PostView(props) {
 	const { id } = useParams();
 	const [post, updatePost] = useState([]);
 	const [comments, updateComments] = useState([]);
-	const { user } = useContext(UserContext);
+	const [addComment, updateAddComment] = useState(false);
+	const { user, updateUser } = useContext(UserContext);
 
 	useEffect(() => {
 		getPost(id).then((res) => updatePost(res));
@@ -20,9 +21,10 @@ function PostView(props) {
 
 	function handleUpdateScore(post, value) {
 		if (user.id !== "Guest") {
-			changeScore(post.id, value, user).then((res) =>
-				updatePost(res.filter((p) => p.id === post.id)[0])
-			);
+			changeScore(post.id, value, user).then((res) => {
+				updatePost(res.posts.filter((p) => p.id === post.id)[0]);
+				updateUser(res.user);
+			});
 		} else {
 			alert("Please login to do that");
 		}
@@ -30,7 +32,15 @@ function PostView(props) {
 
 	return (
 		<Fragment>
-			{post && <Post post={post} updateScore={handleUpdateScore} />}
+			{post && (
+				<Post
+					post={post}
+					updateScore={handleUpdateScore}
+					addComment={addComment}
+					updateAddComment={updateAddComment}
+				/>
+			)}
+			{/* {addComment && <AddComment post={post} />} */}
 			{comments && (
 				<ul>
 					{comments.map((comment) => (

@@ -48,6 +48,8 @@ let commentData = [
 	},
 ];
 
+// TODO: Add comment functionality
+
 let users = [
 	{
 		id: "admin_account",
@@ -55,7 +57,7 @@ let users = [
 		password: "Password",
 		posts: 0,
 		comments: 0,
-		votedPosts: [],
+		votedPosts: {},
 	},
 	{
 		id: "jfajd;sfe71380ceufad;sjk8",
@@ -63,7 +65,7 @@ let users = [
 		password: "RisingDough32",
 		posts: 0,
 		comments: 1,
-		votedPosts: [],
+		votedPosts: {},
 	},
 	{
 		id: "jfajd;sfeqfu8a01j2kjfke",
@@ -71,7 +73,7 @@ let users = [
 		password: "Doughness9",
 		posts: 0,
 		comments: 1,
-		votedPosts: [],
+		votedPosts: {},
 	},
 ];
 
@@ -108,7 +110,7 @@ app.put("/posts/:id", (req, res) => {
 		postData[index].score += value;
 		users[uIndex].votedPosts[id] = value;
 	}
-	res.send(postData);
+	res.send({ posts: postData, user: users[uIndex] });
 });
 
 app.get("/posts/:id/comments", (req, res) => {

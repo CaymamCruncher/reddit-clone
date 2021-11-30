@@ -6,7 +6,7 @@ import Post from "./Post.js";
 
 function PostDashboard() {
 	const [posts, updatePosts] = useState([]);
-	const { user } = useContext(UserContext);
+	const { user, updateUser } = useContext(UserContext);
 
 	useEffect(() => {
 		console.log("rerender");
@@ -15,7 +15,10 @@ function PostDashboard() {
 
 	function handleUpdateScore(post, value) {
 		if (user.id !== "Guest") {
-			changeScore(post.id, value, user).then((res) => updatePosts(res));
+			changeScore(post.id, value, user).then((res) => {
+				updatePosts(res.posts);
+				updateUser(res.user);
+			});
 		} else {
 			alert("Please login to do that");
 		}

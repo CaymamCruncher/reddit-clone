@@ -22,3 +22,11 @@ body {
   padding: var(--padding);
   max-width: 1000px;
 }
+
+.active-upvote {
+  background-color: red;
+}
+
+.active-downvote {
+  background-color: blue;
+}
