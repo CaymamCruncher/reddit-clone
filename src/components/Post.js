@@ -3,7 +3,7 @@ import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 
 function Post(props) {
-	const { post, updateScore } = props;
+	const { post, updateScore, toggleAddComment } = props;
 	const { user } = useContext(UserContext);
 	return (
 		<article className="container post">
@@ -39,6 +39,9 @@ function Post(props) {
 					<button onClick={() => updateScore(post, -1)}>Downvote</button>
 				)}
 			</small>
+			{toggleAddComment && (
+				<button onClick={toggleAddComment}>Add Comment</button>
+			)}
 		</article>
 	);
 }

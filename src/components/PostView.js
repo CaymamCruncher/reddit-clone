@@ -4,8 +4,7 @@ import { useParams } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
 import Post from "./Post";
 import Comment from "./Comment";
-
-// TODO: Add update score in here
+import AddComment from "./AddComment";
 
 function PostView(props) {
 	const { id } = useParams();
@@ -17,7 +16,7 @@ function PostView(props) {
 	useEffect(() => {
 		getPost(id).then((res) => updatePost(res));
 		getComments(id).then((res) => updateComments(res));
-	}, [id]);
+	}, [id, post]);
 
 	function handleUpdateScore(post, value) {
 		if (user.id !== "Guest") {
@@ -30,17 +29,26 @@ function PostView(props) {
 		}
 	}
 
+	function toggleAddComment() {
+		updateAddComment(!addComment);
+	}
+
 	return (
 		<Fragment>
 			{post && (
 				<Post
 					post={post}
 					updateScore={handleUpdateScore}
-					addComment={addComment}
-					updateAddComment={updateAddComment}
+					toggleAddComment={toggleAddComment}
 				/>
 			)}
-			{/* {addComment && <AddComment post={post} />} */}
+			{addComment && (
+				<AddComment
+					post={post}
+					toggleAddComment={toggleAddComment}
+					updatePost={updatePost}
+				/>
+			)}
 			{comments && (
 				<ul>
 					{comments.map((comment) => (

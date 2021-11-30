@@ -119,6 +119,16 @@ app.get("/posts/:id/comments", (req, res) => {
 	res.send(comments);
 });
 
+app.post("/posts/:id/comments", (req, res) => {
+	let comment = req.body;
+	let post = postData.find((p) => p.id === req.params.id);
+	let user = users.find((u) => u.username === comment.author);
+	post.numOfComments += 1;
+	user.comments += 1;
+	commentData.push(comment);
+	res.send(post);
+});
+
 app.post("/users", (req, res) => {
 	let { username, password } = req.body;
 	let user = users.find((u) => u.username === username);

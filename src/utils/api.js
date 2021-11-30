@@ -51,3 +51,13 @@ export function changeScore(id, value, user) {
 		.then((res) => res.json())
 		.catch((err) => console.warn(err));
 }
+
+export function addComment(comment, id) {
+	return fetch(`${url}/posts/${id}/comments`, {
+		method: "POST",
+		body: JSON.stringify(comment),
+		headers,
+	})
+		.then((res) => res.json())
+		.catch((err) => console.warn(err));
+}
