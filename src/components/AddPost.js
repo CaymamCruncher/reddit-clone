@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext } from "react";
+import { Fragment, useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { addPost } from "../utils/api";
 import { useHistory } from "react-router-dom";
@@ -27,9 +27,13 @@ function AddPost() {
 			history.push(`/posts/${post.id}`);
 		});
 	}
-	if (user.id === "Guest") {
-		history.push("/login");
-	}
+
+	useEffect(() => {
+		if (user.id === "Guest") {
+			history.push("/login");
+		}
+	}, [user, history]);
+
 	return (
 		<Fragment>
 			<h2>Add Post</h2>

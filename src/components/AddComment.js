@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { addComment } from "../utils/api";
 import { useHistory } from "react-router-dom";
@@ -22,13 +22,16 @@ function AddComment(props) {
 		addComment(comment, post.id).then((res) => {
 			updateContent("");
 			toggleAddComment();
-			console.log(res);
 			updatePost(res);
 		});
 	}
-	if (user.id === "Guest") {
-		history.push("/login");
-	}
+
+	useEffect(() => {
+		if (user.id === "Guest") {
+			history.push("/login");
+		}
+	}, [user, history]);
+
 	return (
 		<form onSubmit={handleAddComment}>
 			<label htmlFor="content">Comment</label>

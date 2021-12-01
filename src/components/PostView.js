@@ -14,8 +14,16 @@ function PostView(props) {
 	const { user, updateUser } = useContext(UserContext);
 
 	useEffect(() => {
-		getPost(id).then((res) => updatePost(res));
-		getComments(id).then((res) => updateComments(res));
+		let isMounted = true;
+		getPost(id).then((res) => {
+			if (isMounted) updatePost(res);
+		});
+		getComments(id).then((res) => {
+			if (isMounted) updateComments(res);
+		});
+		return () => {
+			isMounted = false;
+		};
 	}, [id, post]);
 
 	function handleUpdateScore(post, value) {
