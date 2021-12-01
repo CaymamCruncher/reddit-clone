@@ -30,7 +30,12 @@ function PostView(props) {
 		if (user.id !== "Guest") {
 			changeScore(post.id, value, user).then((res) => {
 				updatePost(res.posts.filter((p) => p.id === post.id)[0]);
-				updateUser(res.user);
+				console.log(res.user);
+				updateUser({
+					id: res.user.id,
+					name: res.user.username,
+					votedPosts: res.user.votedPosts,
+				});
 			});
 		} else {
 			alert("Please login to do that");

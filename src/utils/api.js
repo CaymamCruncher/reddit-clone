@@ -32,6 +32,16 @@ export function addPost(post) {
 		.catch((err) => console.warn(err));
 }
 
+export function editPost(post, user) {
+	return fetch(`${url}/posts/${post.id}`, {
+		method: "PUT",
+		body: JSON.stringify({ post, user }),
+		headers,
+	})
+		.then((res) => res.json())
+		.catch((err) => console.warn(err));
+}
+
 export function authenticateUser(username, password) {
 	return fetch(`${url}/users`, {
 		method: "POST",
@@ -43,7 +53,7 @@ export function authenticateUser(username, password) {
 }
 
 export function changeScore(id, value, user) {
-	return fetch(`${url}/posts/${id}`, {
+	return fetch(`${url}/posts/${id}/score`, {
 		method: "PUT",
 		body: JSON.stringify({ id, value, user }),
 		headers,

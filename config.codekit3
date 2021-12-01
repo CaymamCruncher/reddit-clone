@@ -427,6 +427,17 @@
       "sC" : 3,
       "tS" : 0
     },
+    "\/src\/components\/EditPost.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 1,
+      "oA" : 1,
+      "oAP" : "\/src\/components\/EditPost-min.js",
+      "oF" : 0,
+      "sC" : 3,
+      "tS" : 0
+    },
     "\/src\/components\/Login.js" : {
       "bF" : 0,
       "ft" : 64,

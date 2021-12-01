@@ -3,6 +3,7 @@ import PostDashboard from "./components/PostDashboard";
 import PostView from "./components/PostView";
 import Login from "./components/Login";
 import AddPost from "./components/AddPost";
+import EditPost from "./components/EditPost";
 import "./styles/css/App.css";
 import { UserContextProvider } from "./context/UserContext";
 import { Route, Link } from "react-router-dom";
@@ -30,7 +31,8 @@ function App() {
 			<main>
 				<UserContextProvider>
 					<Route exact path="/" component={PostDashboard} />
-					<Route path="/posts/:id" component={PostView} />
+					<Route exact path="/posts/:id" component={PostView} />
+					<Route path="/posts/:id/edit" component={EditPost} />
 					<Route path="/login" component={Login} />
 					<Route path="/addpost" component={AddPost} />
 				</UserContextProvider>

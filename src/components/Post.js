@@ -14,6 +14,11 @@ function Post(props) {
 			<small>
 				Posted by {post.author} on {post.date}{" "}
 			</small>
+			{post.edited && (
+				<small>
+					Edited by {post.edited} on {post.editedOn}
+				</small>
+			)}
 			<p>{post.content}</p>
 			<small>Number of Comments {post.numOfComments}</small>
 			<small>
@@ -41,6 +46,9 @@ function Post(props) {
 			</small>
 			{toggleAddComment && (
 				<button onClick={toggleAddComment}>Add Comment</button>
+			)}
+			{(user.name === post.author || user.id === "admin_account") && (
+				<Link to={`/posts/${post.id}/edit`}>Edit Post</Link>
 			)}
 		</article>
 	);

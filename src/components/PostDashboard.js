@@ -17,7 +17,11 @@ function PostDashboard() {
 		if (user.id !== "Guest") {
 			changeScore(post.id, value, user).then((res) => {
 				updatePosts(res.posts);
-				updateUser(res.user);
+				updateUser({
+					id: res.user.id,
+					name: res.user.username,
+					votedPosts: res.user.votedPosts,
+				});
 			});
 		} else {
 			alert("Please login to do that");

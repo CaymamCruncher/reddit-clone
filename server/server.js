@@ -93,7 +93,7 @@ app.post("/posts", (req, res) => {
 	res.send(post);
 });
 
-app.put("/posts/:id", (req, res) => {
+app.put("/posts/:id/score", (req, res) => {
 	const { id, value, user } = req.body;
 	let index = postData.findIndex((p) => p.id === id);
 	let uIndex = users.findIndex((u) => u.id === user.id);
@@ -127,6 +127,18 @@ app.post("/posts/:id/comments", (req, res) => {
 	user.comments += 1;
 	commentData.push(comment);
 	res.send(post);
+});
+
+app.put("/posts/:id", (req, res) => {
+	let editedPost = req.body.post;
+	let user = req.body.user;
+	let author = users.find((u) => u.id === user.id);
+	if (author.username === editedPost.author || author.id === "admin_account") {
+		postData = postData.map((post) =>
+			post.id === editedPost.id ? editedPost : post
+		);
+	}
+	res.send(postData);
 });
 
 app.post("/users", (req, res) => {
