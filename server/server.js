@@ -1,5 +1,6 @@
 const express = require("express");
 const cors = require("cors");
+const crypto = require("crypto");
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(cors());
@@ -54,7 +55,7 @@ let users = [
 	{
 		id: "admin_account",
 		username: "Admin",
-		password: "Password",
+		password: hashPassword("password"),
 		posts: 0,
 		comments: 0,
 		votedPosts: {},
@@ -77,6 +78,34 @@ let users = [
 	},
 ];
 
+// function for generating password hash
+
+function hashPassword(
+	password,
+	salt = crypto.randomBytes(128).toString("hex")
+) {
+	let hash = crypto.createHmac("sha256", salt);
+	hash.update(password);
+	let hashedPassword = hash.digest("hex");
+	return { hash: hashedPassword, salt };
+}
+
+// function for comparing hashed passwords
+function comparePassword(password, user) {
+	const { salt } = user.password;
+	let passwordData = hashPassword(password, salt);
+	console.log(passwordData);
+	console.log(user.password);
+	return passwordData.hash === user.password.hash;
+}
+
+// function user aunthentication
+
+function authenticateUser(user, password) {
+	let validUser = users.find((u) => u.id === user.id);
+	return { result: comparePassword(password, validUser), user: validUser };
+}
+
 app.get("/posts", (req, res) => {
 	res.send(postData);
 });
@@ -95,6 +124,7 @@ app.post("/posts", (req, res) => {
 
 app.put("/posts/:id/score", (req, res) => {
 	const { id, value, user } = req.body;
+	authenticateUser(user);
 	let index = postData.findIndex((p) => p.id === id);
 	let uIndex = users.findIndex((u) => u.id === user.id);
 	let votedPosts = users[uIndex].votedPosts;
@@ -142,9 +172,9 @@ app.put("/posts/:id", (req, res) => {
 });
 
 app.post("/users", (req, res) => {
-	let { username, password } = req.body;
-	let user = users.find((u) => u.username === username);
-	if (user && user.password === password) {
+	let { id, password } = req.body;
+	let { result, user } = authenticateUser(id, password);
+	if (result) {
 		res.send({ result: true, user: user });
 	} else {
 		res.send({ result: false });
