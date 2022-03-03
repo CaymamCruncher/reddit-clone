@@ -101,10 +101,21 @@ function comparePassword(password, user) {
 
 // function user aunthentication
 
-function authenticateUser(user, password) {
-	let validUser = users.find((u) => u.id === user.id);
-	return { result: comparePassword(password, validUser), user: validUser };
+function authenticateUser(user, password) {}
+
+function generateAccessToken(user) {
+	let time = new Date().getTime();
+	return {
+		iss: "http://localhost:3000/",
+		sub: user.username,
+		aud: "http://localhost:3000",
+		exp: time + 15 * 60000,
+		iat: time,
+		scope: "user",
+	};
 }
+
+generateAccessToken(users[0]);
 
 app.get("/posts", (req, res) => {
 	res.send(postData);
@@ -172,10 +183,13 @@ app.put("/posts/:id", (req, res) => {
 });
 
 app.post("/users", (req, res) => {
-	let { id, password } = req.body;
-	let { result, user } = authenticateUser(id, password);
+	let { username, password } = req.body;
+	let user = users.find((u) => u.username === username);
+	let result = comparePassword(password, user);
 	if (result) {
-		res.send({ result: true, user: user });
+		let accessToken = generateAccessToken();
+		user.accessToken = accessToken;
+		res.send({ result: true, accessToken });
 	} else {
 		res.send({ result: false });
 	}
