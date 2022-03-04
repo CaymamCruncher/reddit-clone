@@ -105,17 +105,18 @@ function authenticateUser(user, password) {}
 
 function generateAccessToken(user) {
 	let time = new Date().getTime();
-	return {
+	let token = {
 		iss: "http://localhost:3000/",
-		sub: user.username,
+		sub: user.id,
 		aud: "http://localhost:3000",
-		exp: time + 15 * 60000,
+		exp: time + 1 * 60000,
 		iat: time,
+		secret: crypto.randomBytes(64).toString("hex"),
 		scope: "user",
 	};
+	user.accessToken = token;
+	return token.secret;
 }
-
-generateAccessToken(users[0]);
 
 app.get("/posts", (req, res) => {
 	res.send(postData);
@@ -187,8 +188,7 @@ app.post("/users", (req, res) => {
 	let user = users.find((u) => u.username === username);
 	let result = comparePassword(password, user);
 	if (result) {
-		let accessToken = generateAccessToken();
-		user.accessToken = accessToken;
+		let accessToken = generateAccessToken(user);
 		res.send({ result: true, accessToken });
 	} else {
 		res.send({ result: false });
