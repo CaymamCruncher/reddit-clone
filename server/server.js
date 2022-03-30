@@ -109,24 +109,24 @@ function comparePassword(password, user) {
 // function user aunthentication
 
 function authenticateUser(accessToken, refreshToken, ip, res) {
-	let { result, reason } = authenticateAccessToken(accessToken);
+	let { result, reason, data } = authenticateAccessToken(accessToken);
 	if (!result && reason === "expired") {
 		let status = authenticateRefreshToken(refreshToken, ip);
 		if (status.result) {
 			let token = generateAccessToken(status.user, accessTokenKey);
 			res.cookie(
 				"jwt",
-				{ token, refreshToken },
+				{ accessToken: token, refreshToken },
 				{ secure: true, httpOnly: true }
 			);
-			return { result: true };
+			return { result: true, data: status.data };
 		} else {
 			return status;
 		}
 	} else if (!result) {
 		return { result: false, reason };
 	} else {
-		return { result: true };
+		return { result: true, data };
 	}
 }
 
@@ -134,6 +134,7 @@ function generateAccessToken(user) {
 	let tokenCredentials = {
 		id: user.id,
 		username: user.username,
+		votedPosts: user.votedPosts,
 	};
 	let token = jwt.sign(tokenCredentials, accessTokenKey, {
 		expiresIn: 3,
@@ -145,21 +146,22 @@ function generateAccessToken(user) {
 function generateRefreshToken(user, ip) {
 	let tokenCredentials = {
 		id: user.id,
-		user: user.username,
+		username: user.username,
+		votedPosts: user.votedPosts,
 		ip,
 	};
 	let token = jwt.sign(tokenCredentials, refreshTokenKey, {
 		expiresIn: 2629746,
 		algorithm: "HS256",
 	});
-	// user.refreshTokens.push(token);
+	user.refreshTokens.push(token);
 	return token;
 }
 
 function authenticateAccessToken(token) {
 	try {
-		jwt.verify(token, accessTokenKey);
-		return { result: true };
+		let data = jwt.verify(token, accessTokenKey);
+		return { result: true, data };
 	} catch (error) {
 		if (error.toString().includes("expired")) {
 			return { result: false, reason: "expired" };
@@ -180,7 +182,7 @@ function authenticateRefreshToken(refreshToken, ip) {
 			user.refreshTokens = user.refreshTokens.filter((t) => t === refreshToken);
 			return { result: false, reason: "Different IP" };
 		} else {
-			return { result: true, user };
+			return { result: true, data: token, user };
 		}
 	} catch (error) {
 		if (error.toString().includes("expired")) {
@@ -269,7 +271,35 @@ app.put("/posts/:id", (req, res) => {
 	res.send(postData);
 });
 
-app.post("/users", (req, res, next) => {
+app.post("/users/check", (req, res) => {
+	let cookie = req.cookies.jwt;
+	if (!cookie) {
+		res.status(404).send({ result: false, reason: "Token not found" });
+	} else {
+		let { accessToken, refreshToken } = cookie;
+		let authentication = authenticateUser(
+			accessToken,
+			refreshToken,
+			req.socket.remoteAddress,
+			res
+		);
+		if (authentication.result) {
+			let user = authentication.data;
+			res.send({
+				result: true,
+				user: {
+					id: user.id,
+					username: user.username,
+					votedPosts: user.votedPosts,
+				},
+			});
+		} else {
+			res.status(401).send({ result: false, reason: authentication.reason });
+		}
+	}
+});
+
+app.post("/users", (req, res) => {
 	let { username, password } = req.body;
 	let user = users.find((u) => u.username === username);
 	let result = comparePassword(password, user);
@@ -283,8 +313,6 @@ app.post("/users", (req, res, next) => {
 		);
 		res.send({
 			result: true,
-			accessToken,
-			refreshToken,
 			user: {
 				id: user.id,
 				username: user.username,

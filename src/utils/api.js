@@ -30,7 +30,7 @@ export function addPost(post) {
 		headers,
 	}).then((res) => {
 		if (res.ok) {
-			res.json();
+			return res.json();
 		} else {
 			throw new Error(res.statusText);
 		}
@@ -46,6 +46,20 @@ export function editPost(post, user) {
 	})
 		.then((res) => res.json())
 		.catch((err) => console.warn(err));
+}
+
+export function checkForUser() {
+	return fetch(`${url}/users/check`, {
+		method: "POST",
+		credentials: "include",
+		headers,
+	}).then((res) => {
+		if (res.ok) {
+			return res.json();
+		} else {
+			throw new Error(res.statusText);
+		}
+	});
 }
 
 export function authenticateUser(username, password) {

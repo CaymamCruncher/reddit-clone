@@ -1,14 +1,26 @@
-import { Fragment, React } from "react";
+import { Fragment, React, useEffect, useContext } from "react";
 import PostDashboard from "./components/PostDashboard";
 import PostView from "./components/PostView";
 import Login from "./components/Login";
 import AddPost from "./components/AddPost";
 import EditPost from "./components/EditPost";
+import { checkForUser } from "./utils/api";
 import "./styles/css/App.css";
-import { UserContextProvider } from "./context/UserContext";
+import { UserContext } from "./context/UserContext";
 import { Route, Link } from "react-router-dom";
 
 function App() {
+	const { updateUser, user } = useContext(UserContext);
+	useEffect(() => {
+		if (user.id === "Guest") {
+			checkForUser()
+				.then(({ user }) => {
+					console.log(user);
+					updateUser(user);
+				})
+				.catch((err) => console.warn(err));
+		}
+	}, [updateUser, user.id]);
 	return (
 		<Fragment>
 			<header>
@@ -29,13 +41,11 @@ function App() {
 				</div>
 			</header>
 			<main>
-				<UserContextProvider>
-					<Route exact path="/" component={PostDashboard} />
-					<Route exact path="/posts/:id" component={PostView} />
-					<Route path="/posts/:id/edit" component={EditPost} />
-					<Route path="/login" component={Login} />
-					<Route path="/addpost" component={AddPost} />
-				</UserContextProvider>
+				<Route exact path="/" component={PostDashboard} />
+				<Route exact path="/posts/:id" component={PostView} />
+				<Route path="/posts/:id/edit" component={EditPost} />
+				<Route path="/login" component={Login} />
+				<Route path="/addpost" component={AddPost} />
 			</main>
 			<footer>
 				{/* turn into own component in the future? */}
