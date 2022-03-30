@@ -28,9 +28,13 @@ export function addPost(post) {
 		body: JSON.stringify(post),
 		credentials: "include",
 		headers,
-	})
-		.then((res) => res.json())
-		.catch((err) => console.warn(err));
+	}).then((res) => {
+		if (res.ok) {
+			res.json();
+		} else {
+			throw new Error(res.statusText);
+		}
+	});
 }
 
 export function editPost(post, user) {

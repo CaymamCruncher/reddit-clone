@@ -7,6 +7,7 @@ function AddPost() {
 	const [title, updateTitle] = useState("");
 	const [type, updateType] = useState("text");
 	const [content, updateContent] = useState("");
+	const [postStatus, updatePostStatus] = useState("");
 	const { user } = useContext(UserContext);
 	const history = useHistory();
 
@@ -22,10 +23,15 @@ function AddPost() {
 			score: 0,
 			numOfComments: 0,
 		};
-		addPost(post).then((res) => {
-			console.log(res);
-			history.push(`/posts/${post.id}`);
-		});
+		addPost(post)
+			.then((res) => {
+				console.log(res);
+				history.push(`/posts/${post.id}`);
+			})
+			.catch((err) => {
+				console.error(err.message);
+				updatePostStatus("Sorry something went wrong. Please try again later.");
+			});
 	}
 
 	useEffect(() => {
@@ -37,6 +43,7 @@ function AddPost() {
 	return (
 		<Fragment>
 			<h2>Add Post</h2>
+			<p>{postStatus}</p>
 			<form onSubmit={handleAddPost}>
 				<label htmlFor="title">Title</label>
 				<input

@@ -152,7 +152,7 @@ function generateRefreshToken(user, ip) {
 		expiresIn: 2629746,
 		algorithm: "HS256",
 	});
-	user.refreshTokens.push(token);
+	// user.refreshTokens.push(token);
 	return token;
 }
 
@@ -216,7 +216,7 @@ app.post("/posts", (req, res) => {
 	} else {
 		res
 			.status(401)
-			.send({ result: "Failure", reason: authentication.reason.toString() });
+			.send({ result: "Failure", reason: authentication.reason.message });
 	}
 });
 
