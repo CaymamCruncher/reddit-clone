@@ -12,19 +12,13 @@ function Login() {
 	function loginUser(e) {
 		e.preventDefault();
 		authenticateUser(username, password).then((res) => {
+			console.log(res);
 			if (res.result) {
 				console.log(res.user);
-				let now = new Date();
 				updateUser({
 					id: res.user.id,
 					name: res.user.username,
 					votedPosts: res.user.votedPosts,
-				});
-				localStorage.setItem("user", {
-					id: res.user.id,
-					name: res.user.username,
-					votedPosts: res.user.votedPosts,
-					expiration: now.getTime(),
 				});
 				alert(`Signed in as ${username}`);
 				history.goBack();

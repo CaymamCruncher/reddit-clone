@@ -26,6 +26,7 @@ export function addPost(post) {
 	return fetch(`${url}/posts`, {
 		method: "POST",
 		body: JSON.stringify(post),
+		credentials: "include",
 		headers,
 	})
 		.then((res) => res.json())
@@ -36,6 +37,7 @@ export function editPost(post, user) {
 	return fetch(`${url}/posts/${post.id}`, {
 		method: "PUT",
 		body: JSON.stringify({ post, user }),
+		credentials: "include",
 		headers,
 	})
 		.then((res) => res.json())
@@ -46,6 +48,7 @@ export function authenticateUser(username, password) {
 	return fetch(`${url}/users`, {
 		method: "POST",
 		body: JSON.stringify({ username, password }),
+		credentials: "include",
 		headers,
 	})
 		.then((res) => res.json())
@@ -56,6 +59,7 @@ export function changeScore(id, value, user) {
 	return fetch(`${url}/posts/${id}/score`, {
 		method: "PUT",
 		body: JSON.stringify({ id, value, user }),
+		credentials: "include",
 		headers,
 	})
 		.then((res) => res.json())
@@ -66,6 +70,7 @@ export function addComment(comment, id) {
 	return fetch(`${url}/posts/${id}/comments`, {
 		method: "POST",
 		body: JSON.stringify(comment),
+		credentials: "include",
 		headers,
 	})
 		.then((res) => res.json())

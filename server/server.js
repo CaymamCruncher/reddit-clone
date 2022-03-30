@@ -1,9 +1,12 @@
 const express = require("express");
 const cors = require("cors");
 const crypto = require("crypto");
+const jwt = require("jsonwebtoken");
+const cookieParser = require("cookie-parser");
 const port = process.env.PORT || 5000;
 const app = express();
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({ origin: true, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded());
 
@@ -58,6 +61,7 @@ let users = [
 		password: hashPassword("password"),
 		posts: 0,
 		comments: 0,
+		refreshTokens: [],
 		votedPosts: {},
 	},
 	{
@@ -66,6 +70,7 @@ let users = [
 		password: "RisingDough32",
 		posts: 0,
 		comments: 1,
+		refreshTokens: [],
 		votedPosts: {},
 	},
 	{
@@ -74,9 +79,13 @@ let users = [
 		password: "Doughness9",
 		posts: 0,
 		comments: 1,
+		refreshTokens: [],
 		votedPosts: {},
 	},
 ];
+
+let accessTokenKey = crypto.randomBytes(128).toString("hex");
+let refreshTokenKey = crypto.randomBytes(128).toString("hex");
 
 // function for generating password hash
 
@@ -94,28 +103,92 @@ function hashPassword(
 function comparePassword(password, user) {
 	const { salt } = user.password;
 	let passwordData = hashPassword(password, salt);
-	console.log(passwordData);
-	console.log(user.password);
 	return passwordData.hash === user.password.hash;
 }
 
 // function user aunthentication
 
-function authenticateUser(user, password) {}
+function authenticateUser(accessToken, refreshToken, ip, res) {
+	let { result, reason } = authenticateAccessToken(accessToken);
+	if (!result && reason === "expired") {
+		let status = authenticateRefreshToken(refreshToken, ip);
+		if (status.result) {
+			let token = generateAccessToken(status.user, accessTokenKey);
+			res.cookie(
+				"jwt",
+				{ token, refreshToken },
+				{ secure: true, httpOnly: true }
+			);
+			return { result: true };
+		} else {
+			return status;
+		}
+	} else if (!result) {
+		return { result: false, reason };
+	} else {
+		return { result: true };
+	}
+}
 
 function generateAccessToken(user) {
-	let time = new Date().getTime();
-	let token = {
-		iss: "http://localhost:3000/",
-		sub: user.id,
-		aud: "http://localhost:3000",
-		exp: time + 1 * 60000,
-		iat: time,
-		secret: crypto.randomBytes(64).toString("hex"),
-		scope: "user",
+	let tokenCredentials = {
+		id: user.id,
+		username: user.username,
 	};
-	user.accessToken = token;
-	return token.secret;
+	let token = jwt.sign(tokenCredentials, accessTokenKey, {
+		expiresIn: 3,
+		algorithm: "HS256",
+	});
+	return token;
+}
+
+function generateRefreshToken(user, ip) {
+	let tokenCredentials = {
+		id: user.id,
+		user: user.username,
+		ip,
+	};
+	let token = jwt.sign(tokenCredentials, refreshTokenKey, {
+		expiresIn: 2629746,
+		algorithm: "HS256",
+	});
+	user.refreshTokens.push(token);
+	return token;
+}
+
+function authenticateAccessToken(token) {
+	try {
+		jwt.verify(token, accessTokenKey);
+		return { result: true };
+	} catch (error) {
+		if (error.toString().includes("expired")) {
+			return { result: false, reason: "expired" };
+		} else {
+			return { result: false, reason: error };
+		}
+	}
+}
+
+function authenticateRefreshToken(refreshToken, ip) {
+	try {
+		let token = jwt.verify(refreshToken, refreshTokenKey);
+		let user = users.find((u) => u.id === token.id);
+		if (!user.refreshTokens.includes(refreshToken)) {
+			throw new Error("User does not contain refresh token");
+		}
+		if (token.ip !== ip) {
+			user.refreshTokens = user.refreshTokens.filter((t) => t === refreshToken);
+			return { result: false, reason: "Different IP" };
+		} else {
+			return { result: true, user };
+		}
+	} catch (error) {
+		if (error.toString().includes("expired")) {
+			return { result: false, reason: "expired" };
+		} else {
+			return { result: false, reason: error };
+		}
+	}
 }
 
 app.get("/posts", (req, res) => {
@@ -130,8 +203,21 @@ app.get("/posts/:id", (req, res) => {
 
 app.post("/posts", (req, res) => {
 	const post = req.body;
-	postData.push(post);
-	res.send(post);
+	const { accessToken, refreshToken } = req.cookies.jwt;
+	const authentication = authenticateUser(
+		accessToken,
+		refreshToken,
+		req.socket.remoteAddress,
+		res
+	);
+	if (authentication.result) {
+		postData.push(post);
+		res.send(post);
+	} else {
+		res
+			.status(401)
+			.send({ result: "Failure", reason: authentication.reason.toString() });
+	}
 });
 
 app.put("/posts/:id/score", (req, res) => {
@@ -183,13 +269,28 @@ app.put("/posts/:id", (req, res) => {
 	res.send(postData);
 });
 
-app.post("/users", (req, res) => {
+app.post("/users", (req, res, next) => {
 	let { username, password } = req.body;
 	let user = users.find((u) => u.username === username);
 	let result = comparePassword(password, user);
 	if (result) {
 		let accessToken = generateAccessToken(user);
-		res.send({ result: true, accessToken });
+		let refreshToken = generateRefreshToken(user, req.socket.remoteAddress);
+		res.cookie(
+			"jwt",
+			{ accessToken, refreshToken },
+			{ secure: true, httpOnly: true }
+		);
+		res.send({
+			result: true,
+			accessToken,
+			refreshToken,
+			user: {
+				id: user.id,
+				username: user.username,
+				votedPosts: user.votedPosts,
+			},
+		});
 	} else {
 		res.send({ result: false });
 	}
