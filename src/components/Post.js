@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserContext } from "../context/UserContext";
+import { ReactComponent as Comment } from "../images/comment.svg";
 import { ReactComponent as Upvote } from "../images/upvote.svg";
 import { ReactComponent as Downvote } from "../images/downvote.svg";
 
@@ -22,30 +23,31 @@ function Post(props) {
 				</small>
 			)}
 			<p>{post.content}</p>
-			<small>Number of Comments {post.numOfComments}</small>
-			<small>
-				<button
-					className={
-						user.votedPosts[post.id] === 1
-							? "active-upvote upvote score"
-							: "upvote score"
-					}
-					onClick={() => updateScore(post, 1)}
-				>
-					<Upvote />
-				</button>
-				{post.score}
-				<button
-					className={
-						user.votedPosts[post.id] === -1
-							? "active-downvote downvote score"
-							: "downvote score"
-					}
-					onClick={() => updateScore(post, -1)}
-				>
-					<Downvote />
-				</button>
-			</small>
+			<Link to={`/posts/${post.id}/comment`} className="post-icon">
+				<Comment />
+			</Link>
+			<small>{post.numOfComments}</small>
+			<button
+				className={
+					user.votedPosts[post.id] === 1
+						? "active-upvote upvote post-icon"
+						: "upvote post-icon"
+				}
+				onClick={() => updateScore(post, 1)}
+			>
+				<Upvote />
+			</button>
+			<small>{post.score}</small>
+			<button
+				className={
+					user.votedPosts[post.id] === -1
+						? "active-downvote downvote post-icon"
+						: "downvote post-icon"
+				}
+				onClick={() => updateScore(post, -1)}
+			>
+				<Downvote />
+			</button>
 			{toggleAddComment && (
 				<button onClick={toggleAddComment}>Add Comment</button>
 			)}

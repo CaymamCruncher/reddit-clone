@@ -55,10 +55,18 @@ small {
 	}
 }
 
-.score {
+.post-icon {
 	width: 10px;
 	height: 10px;
 	fill: #fff;
+	display: inline-block;
+	small + &,
+	& + * {
+		margin-left: 0.25rem;
+	}
+	&:hover {
+		fill: rgba(#fff, 0.7);
+	}
 }
 
 .upvote:hover {

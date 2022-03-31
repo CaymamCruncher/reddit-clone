@@ -47,10 +47,17 @@ small {
   margin-top: 0;
 }
 
-.score {
+.post-icon {
   width: 10px;
   height: 10px;
   fill: #fff;
+  display: inline-block;
+}
+small + .post-icon, .post-icon + * {
+  margin-left: 0.25rem;
+}
+.post-icon:hover {
+  fill: rgba(255, 255, 255, 0.7);
 }
 
 .upvote:hover {
