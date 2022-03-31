@@ -1,32 +1,78 @@
 :root {
-	--padding: 2rem;
+	--padding: 3rem;
 }
+
+// default styles
 
 * {
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	text-decoration: none;
+	color: inherit;
+	background-color: transparent;
+	border: none;
 }
 
 * + * {
 	margin-top: 1.5rem;
 }
 
+html {
+	background-color: rgb(21, 32, 43);
+	color: #fff;
+}
+
 body {
 	font-size: 18px;
 	overflow: auto;
+	font-family: sans-serif;
 }
 
+h2 {
+	font-size: 1.6rem;
+}
+
+small {
+	display: inline-block;
+	margin-top: 0.75rem;
+	font-size: 0.8rem;
+}
+
+// utility classes
+
 .container {
-	margin: var(--padding) auto;
-	padding: var(--padding);
+	margin: 2rem auto;
+	padding: 2rem var(--padding);
 	max-width: 1000px;
 }
 
+// post styles
+
+.post {
+	button {
+		margin-top: 0;
+	}
+}
+
+.score {
+	width: 10px;
+	height: 10px;
+	fill: #fff;
+}
+
+.upvote:hover {
+	fill: #ff4a02;
+}
+
+.downvote:hover {
+	fill: #0051ff;
+}
+
 .active-upvote {
-	background-color: red;
+	fill: #ff4a02;
 }
 
 .active-downvote {
-	background-color: blue;
+	fill: #0051ff;
 }
