@@ -105,6 +105,38 @@ form button {
   grid-column: 1/-1;
 }
 
+nav form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+nav form > * {
+  margin: 0;
+}
+nav input {
+  display: inline-block;
+  width: auto;
+  flex-grow: 1;
+}
+nav button {
+  width: 25px;
+  height: 25px;
+  fill: rgba(0, 0, 0, 0.4);
+  padding: 0;
+  background-color: transparent;
+}
+nav button:hover {
+  fill: rgba(0, 0, 0, 0.2);
+}
+nav a {
+  display: inline-block;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+nav a + a {
+  margin-left: 0.5rem;
+}
+
 .post button {
   margin-top: 0;
 }

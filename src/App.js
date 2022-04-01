@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import AddPost from "./components/AddPost";
 import EditPost from "./components/EditPost";
 import { checkForUser } from "./utils/api";
+import { ReactComponent as SearchIcon } from "./images/search.svg";
 import "./styles/css/App.css";
 import { UserContext } from "./context/UserContext";
 import { Route, Link } from "react-router-dom";
@@ -23,22 +24,29 @@ function App() {
 	}, [updateUser, user.id]);
 	return (
 		<Fragment>
-			<header>
+			<header className="container">
 				{/* turn into own component in the future? */}
-				<div className="container">
-					<h1>Breaddit</h1>
-					<nav>
-						<div>
-							<input></input>
-							<button>Submit</button>
-						</div>
-						<Link to="/">Home</Link>
-						<a href="/">Popular</a>
-						<a href="/">New</a>
-						<Link to="/login">Login</Link>
-						<Link to="/addpost">Add Post</Link>
-					</nav>
-				</div>
+				<h1>
+					<Link to="/">Breaddit</Link>
+				</h1>
+				<nav>
+					<form
+						onSubmit={
+							{
+								/* Add search function */
+							}
+						}
+					>
+						<input placeholder="Search"></input>
+						<button>
+							<SearchIcon />
+						</button>
+					</form>
+					<a href="/">Popular</a>
+					<a href="/">New</a>
+					<Link to="/login">Login</Link>
+					<Link to="/addpost">Add Post</Link>
+				</nav>
 			</header>
 			<main className="container">
 				<Route exact path="/" component={PostDashboard} />

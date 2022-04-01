@@ -115,6 +115,42 @@ form {
 	grid-column: 1 / -1;
 }
 
+// header styles
+
+nav {
+	form {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 1rem;
+		& > * {
+			margin: 0;
+		}
+	}
+	input {
+		display: inline-block;
+		width: auto;
+		flex-grow: 1;
+	}
+	button {
+		width: 25px;
+		height: 25px;
+		fill: rgba(#000, 0.4);
+		padding: 0;
+		background-color: transparent;
+		&:hover {
+			fill: rgba(#000, 0.2);
+		}
+	}
+	a {
+		display: inline-block;
+		font-size: 0.8rem;
+		text-transform: uppercase;
+		& + a {
+			margin-left: 0.5rem;
+		}
+	}
+}
+
 // post styles
 
 .post {
