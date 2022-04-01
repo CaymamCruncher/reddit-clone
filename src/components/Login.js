@@ -31,23 +31,27 @@ function Login() {
 	return (
 		<article>
 			<h2>Login</h2>
-			<form onSubmit={loginUser}>
-				<label>Username</label>
-				<input
-					id="username"
-					name="username"
-					type="text"
-					value={username}
-					onChange={(e) => updateUsername(e.target.value)}
-				/>
-				<label>Password</label>
-				<input
-					id="password"
-					name="password"
-					type="password"
-					value={password}
-					onChange={(e) => updatePassword(e.target.value)}
-				/>
+			<form onSubmit={loginUser} className="two-col">
+				<div>
+					<label>Username</label>
+					<input
+						id="username"
+						name="username"
+						type="text"
+						value={username}
+						onChange={(e) => updateUsername(e.target.value)}
+					/>
+				</div>
+				<div>
+					<label>Password</label>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						value={password}
+						onChange={(e) => updatePassword(e.target.value)}
+					/>
+				</div>
 				<button type="submit">Login</button>
 			</form>
 		</article>

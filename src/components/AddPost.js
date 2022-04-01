@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { addPost } from "../utils/api";
 import { useHistory } from "react-router-dom";
@@ -41,49 +41,55 @@ function AddPost() {
 	}, [user, history]);
 
 	return (
-		<Fragment>
+		<article className="container">
 			<h2>Add Post</h2>
 			<p>{postStatus}</p>
-			<form onSubmit={handleAddPost}>
-				<label htmlFor="title">Title</label>
-				<input
-					name="title"
-					id="title"
-					value={title}
-					onChange={(e) => updateTitle(e.target.value)}
-				/>
-				<label htmlFor="type">Type</label>
-				<select
-					name="type"
-					id="type"
-					onChange={(e) => updateType(e.target.value)}
-				>
-					<option value="text" default>
-						Text
-					</option>
-					<option value="img">Image</option>
-					<option value="video">Video</option>
-				</select>
-				<label htmlFor="content">Content</label>
-				{type === "text" ? (
-					<textarea
-						name="content"
-						id="content"
-						value={content}
-						onChange={(e) => updateContent(e.target.value)}
-					/>
-				) : (
+			<form onSubmit={handleAddPost} className="two-col">
+				<div>
+					<label htmlFor="title">Title</label>
 					<input
-						type="file"
-						name="content"
-						id="content"
-						value={content}
-						onChange={(e) => updateContent(e.target.value)}
+						name="title"
+						id="title"
+						value={title}
+						onChange={(e) => updateTitle(e.target.value)}
 					/>
-				)}
+				</div>
+				<div>
+					<label htmlFor="type">Type</label>
+					<select
+						name="type"
+						id="type"
+						onChange={(e) => updateType(e.target.value)}
+					>
+						<option value="text" default>
+							Text
+						</option>
+						<option value="img">Image</option>
+						<option value="video">Video</option>
+					</select>
+				</div>
+				<div className="full-col">
+					<label htmlFor="content">Content</label>
+					{type === "text" ? (
+						<textarea
+							name="content"
+							id="content"
+							value={content}
+							onChange={(e) => updateContent(e.target.value)}
+						/>
+					) : (
+						<input
+							type="file"
+							name="content"
+							id="content"
+							value={content}
+							onChange={(e) => updateContent(e.target.value)}
+						/>
+					)}
+				</div>
 				<button type="submit">Submit</button>
 			</form>
-		</Fragment>
+		</article>
 	);
 }
 

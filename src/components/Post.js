@@ -22,7 +22,7 @@ function Post(props) {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 	return (
-		<article className="container post">
+		<article className="post">
 			<h2>
 				<Link to={`/posts/${post.id}`}>{post.title}</Link>
 			</h2>

@@ -40,7 +40,7 @@ function App() {
 					</nav>
 				</div>
 			</header>
-			<main>
+			<main className="container">
 				<Route exact path="/" component={PostDashboard} />
 				<Route exact path="/posts/:id" component={PostView} />
 				<Route path="/posts/:id/edit" component={EditPost} />
