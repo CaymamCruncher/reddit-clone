@@ -4,6 +4,7 @@ import { UserContext } from "../context/UserContext";
 import { ReactComponent as Comment } from "../images/comment.svg";
 import { ReactComponent as Upvote } from "../images/upvote.svg";
 import { ReactComponent as Downvote } from "../images/downvote.svg";
+import { ReactComponent as Edit } from "../images/edit.svg";
 
 function Post(props) {
 	const { post, updateScore, toggleAddComment } = props;
@@ -66,7 +67,9 @@ function Post(props) {
 				<Downvote />
 			</button>
 			{(user.name === post.author || user.id === "admin_account") && (
-				<Link to={`/posts/${post.id}/edit`}>Edit Post</Link>
+				<Link to={`/posts/${post.id}/edit`} className="post-icon">
+					<Edit />
+				</Link>
 			)}
 		</article>
 	);
