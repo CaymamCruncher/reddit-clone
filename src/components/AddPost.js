@@ -1,7 +1,7 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { addPost } from "../utils/api";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AddPost() {
 	const [title, updateTitle] = useState("");
@@ -9,7 +9,7 @@ function AddPost() {
 	const [content, updateContent] = useState("");
 	const [postStatus, updatePostStatus] = useState("");
 	const { user } = useContext(UserContext);
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	function handleAddPost(e) {
 		e.preventDefault();
@@ -26,7 +26,7 @@ function AddPost() {
 		addPost(post)
 			.then((res) => {
 				console.log(res);
-				history.push(`/posts/${post.id}`);
+				navigate(`/posts/${post.id}`);
 			})
 			.catch((err) => {
 				console.error(err.message);
@@ -36,9 +36,9 @@ function AddPost() {
 
 	useEffect(() => {
 		if (user.id === "Guest") {
-			history.push("/login");
+			navigate("/login");
 		}
-	}, [user, history]);
+	}, [user, navigate]);
 
 	return (
 		<article className="container">

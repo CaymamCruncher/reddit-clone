@@ -1,8 +1,7 @@
 import { Fragment, useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { editPost, getPost } from "../utils/api";
-import { useParams } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 function EditPost(props) {
 	const { id } = useParams();
@@ -10,7 +9,7 @@ function EditPost(props) {
 	const [title, updateTitle] = useState("");
 	const [content, updateContent] = useState("");
 	const { user } = useContext(UserContext);
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	function handleEditPost(e) {
 		e.preventDefault();
@@ -28,7 +27,7 @@ function EditPost(props) {
 		};
 		editPost(editedPost, user).then((res) => {
 			console.log(res);
-			history.push(`/posts/${post.id}`);
+			navigate(`/posts/${post.id}`);
 		});
 	}
 
@@ -36,9 +35,9 @@ function EditPost(props) {
 		let isMounted = true;
 		getPost(id).then((res) => {
 			if (user.id === "Guest") {
-				history.push("/login");
+				navigate("/login");
 			} else if (user.name !== res.author && user.id !== "admin_account") {
-				history.goBack();
+				navigate(-1);
 			}
 			if (isMounted) {
 				updatePost(res);
@@ -49,7 +48,7 @@ function EditPost(props) {
 		return () => {
 			isMounted = false;
 		};
-	}, [user, history, id]);
+	}, [user, navigate, id]);
 
 	return (
 		<Fragment>

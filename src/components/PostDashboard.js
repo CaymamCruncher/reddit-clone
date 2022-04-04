@@ -4,14 +4,16 @@ import { UserContext } from "../context/UserContext";
 import { changeScore } from "../utils/api.js";
 import Post from "./Post.js";
 
-function PostDashboard() {
+function PostDashboard(props) {
 	const [posts, updatePosts] = useState([]);
 	const { user, updateUser } = useContext(UserContext);
+	const { filter } = props;
 
 	useEffect(() => {
 		console.log("rerender");
+		console.log(filter);
 		getPosts().then((data) => updatePosts(data));
-	}, []);
+	}, [filter]);
 
 	function handleUpdateScore(post, value) {
 		if (user.id !== "Guest") {

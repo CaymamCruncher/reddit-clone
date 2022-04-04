@@ -1,4 +1,11 @@
-import { Fragment, React, useEffect, useContext } from "react";
+import {
+	Fragment,
+	React,
+	useEffect,
+	useContext,
+	useState,
+	useRef,
+} from "react";
 import PostDashboard from "./components/PostDashboard";
 import PostView from "./components/PostView";
 import Login from "./components/Login";
@@ -8,10 +15,12 @@ import { checkForUser } from "./utils/api";
 import { ReactComponent as SearchIcon } from "./images/search.svg";
 import "./styles/css/App.css";
 import { UserContext } from "./context/UserContext";
-import { Route, Link } from "react-router-dom";
+import { Route, Link, Routes } from "react-router-dom";
 
 function App() {
 	const { updateUser, user } = useContext(UserContext);
+	const [search, updateSearch] = useState("");
+	const searchText = useRef(null);
 	useEffect(() => {
 		if (user.id === "Guest") {
 			updateUser({
@@ -42,8 +51,13 @@ function App() {
 					<Link to="/">Breaddit</Link>
 				</h1>
 				<nav>
-					<form onSubmit={(e) => console.log(e)}>
-						<input placeholder="Search"></input>
+					<form
+						onSubmit={(e) => {
+							e.preventDefault();
+							updateSearch(searchText.current.value);
+						}}
+					>
+						<input placeholder="Search" ref={searchText} />
 						<button>
 							<SearchIcon />
 						</button>
@@ -55,11 +69,13 @@ function App() {
 				</nav>
 			</header>
 			<main className="container">
-				<Route exact path="/" component={PostDashboard} />
-				<Route exact path="/posts/:id" component={PostView} />
-				<Route path="/posts/:id/edit" component={EditPost} />
-				<Route path="/login" component={Login} />
-				<Route path="/addpost" component={AddPost} />
+				<Routes>
+					<Route exact path="/" element={<PostDashboard filter={search} />} />
+					<Route exact path="/posts/:id" element={<PostView />} />
+					<Route path="/posts/:id/edit" element={<EditPost />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/addpost" element={<AddPost />} />
+				</Routes>
 			</main>
 			<footer>
 				{/* turn into own component in the future? */}

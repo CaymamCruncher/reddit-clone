@@ -86,6 +86,17 @@
       "sC" : 3,
       "tS" : 0
     },
+    "\/node_modules\/history\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 1,
+      "oA" : 1,
+      "oAP" : "\/node_modules\/history\/index-min.js",
+      "oF" : 0,
+      "sC" : 3,
+      "tS" : 0
+    },
     "\/node_modules\/hoist-non-react-statics\/dist\/hoist-non-react-statics.cjs.js" : {
       "bF" : 0,
       "ft" : 64,
@@ -152,6 +163,17 @@
       "sC" : 3,
       "tS" : 0
     },
+    "\/node_modules\/react-router-dom\/.\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 1,
+      "oA" : 1,
+      "oAP" : "\/node_modules\/react-router-dom\/.\/index-min.js",
+      "oF" : 0,
+      "sC" : 3,
+      "tS" : 0
+    },
     "\/node_modules\/react-router-dom\/esm\/react-router-dom.js" : {
       "bF" : 0,
       "ft" : 64,
@@ -159,6 +181,17 @@
       "mi" : 1,
       "oA" : 1,
       "oAP" : "\/node_modules\/react-router-dom\/esm\/react-router-dom-min.js",
+      "oF" : 0,
+      "sC" : 3,
+      "tS" : 0
+    },
+    "\/node_modules\/react-router\/.\/index.js" : {
+      "bF" : 0,
+      "ft" : 64,
+      "ma" : 0,
+      "mi" : 1,
+      "oA" : 1,
+      "oAP" : "\/node_modules\/react-router\/.\/index-min.js",
       "oF" : 0,
       "sC" : 3,
       "tS" : 0

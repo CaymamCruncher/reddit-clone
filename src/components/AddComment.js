@@ -1,13 +1,13 @@
 import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { addComment } from "../utils/api";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function AddComment(props) {
 	const [content, updateContent] = useState("");
 	const { post, toggleAddComment, updatePost } = props;
 	const { user } = useContext(UserContext);
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	function handleAddComment(e) {
 		e.preventDefault();
@@ -28,9 +28,9 @@ function AddComment(props) {
 
 	useEffect(() => {
 		if (user.id === "Guest") {
-			history.push("/login");
+			navigate("/login");
 		}
-	}, [user, history]);
+	}, [user, navigate]);
 
 	return (
 		<form onSubmit={handleAddComment}>

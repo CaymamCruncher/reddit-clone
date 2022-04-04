@@ -1,13 +1,13 @@
 import { useState, useContext } from "react";
 import { UserContext } from "../context/UserContext";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { authenticateUser } from "../utils/api";
 
 function Login() {
 	const { updateUser } = useContext(UserContext);
 	const [username, updateUsername] = useState("");
 	const [password, updatePassword] = useState("");
-	const history = useHistory();
+	const navigate = useNavigate();
 
 	function loginUser(e) {
 		e.preventDefault();
@@ -21,7 +21,7 @@ function Login() {
 					votedPosts: res.user.votedPosts,
 				});
 				alert(`Signed in as ${username}`);
-				history.goBack();
+				navigate(-1);
 			} else {
 				alert("Username or password was wrong");
 			}
