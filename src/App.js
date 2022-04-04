@@ -14,14 +14,26 @@ function App() {
 	const { updateUser, user } = useContext(UserContext);
 	useEffect(() => {
 		if (user.id === "Guest") {
+			updateUser({
+				id: "Processing",
+				username: "Processing",
+				votedPosts: {},
+			});
 			checkForUser()
 				.then(({ user }) => {
 					console.log(user);
 					updateUser(user);
 				})
-				.catch((err) => console.warn(err));
+				.catch((err) =>
+					updateUser({
+						id: "Guest",
+						username: "Guest",
+						votedPosts: {},
+					})
+				);
 		}
-	}, [updateUser, user.id]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 	return (
 		<Fragment>
 			<header className="container">
@@ -30,13 +42,7 @@ function App() {
 					<Link to="/">Breaddit</Link>
 				</h1>
 				<nav>
-					<form
-						onSubmit={
-							{
-								/* Add search function */
-							}
-						}
-					>
+					<form onSubmit={(e) => console.log(e)}>
 						<input placeholder="Search"></input>
 						<button>
 							<SearchIcon />
