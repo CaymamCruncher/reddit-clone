@@ -28,7 +28,7 @@ let postData = [
 		author: "YaBoiBread",
 		content: "I tried to make some bread",
 		type: "text",
-		score: 0,
+		score: 1,
 		numOfComments: 1,
 	},
 ];
@@ -195,6 +195,18 @@ function authenticateRefreshToken(refreshToken, ip) {
 
 app.get("/posts", (req, res) => {
 	res.send(postData);
+});
+
+app.get("/posts/:filter", (req, res) => {
+	const { filter } = req.params;
+	let filteredPosts = postData.filter(
+		(p) =>
+			p.title.includes(filter) ||
+			p.content.includes(filter) ||
+			p.author.toLowerCase() === filter.toLowerCase()
+	);
+	filteredPosts = filteredPosts.sort((a, b) => b.score - a.score);
+	res.send(filteredPosts);
 });
 
 app.get("/posts/:id", (req, res) => {

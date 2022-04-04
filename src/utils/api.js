@@ -10,6 +10,12 @@ export function getPosts() {
 		.catch((err) => console.warn(err));
 }
 
+export function getFilteredPosts(filter) {
+	return fetch(`${url}/posts/${filter}`, { headers })
+		.then((res) => res.json())
+		.catch((err) => console.warn(err));
+}
+
 export function getPost(id) {
 	return fetch(`${url}/posts/${id}`, { headers })
 		.then((res) => res.json())

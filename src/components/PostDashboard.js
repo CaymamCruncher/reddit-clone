@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from "react";
-import { getPosts } from "../utils/api.js";
+import { getPosts, getFilteredPosts } from "../utils/api.js";
 import { UserContext } from "../context/UserContext";
 import { changeScore } from "../utils/api.js";
 import Post from "./Post.js";
@@ -11,8 +11,11 @@ function PostDashboard(props) {
 
 	useEffect(() => {
 		console.log("rerender");
-		console.log(filter);
-		getPosts().then((data) => updatePosts(data));
+		if (filter !== "") {
+			getFilteredPosts(filter).then((data) => updatePosts(data));
+		} else {
+			getPosts().then((data) => updatePosts(data));
+		}
 	}, [filter]);
 
 	function handleUpdateScore(post, value) {
