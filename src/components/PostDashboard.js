@@ -2,20 +2,24 @@ import { useState, useEffect, useContext } from "react";
 import { getPosts, getFilteredPosts } from "../utils/api.js";
 import { UserContext } from "../context/UserContext";
 import { changeScore } from "../utils/api.js";
+import { useLocation } from "react-router-dom";
 import Post from "./Post.js";
 
-function PostDashboard(props) {
+function PostDashboard() {
 	const [posts, updatePosts] = useState([]);
 	const { user, updateUser } = useContext(UserContext);
-	const { filter } = props;
+	const location = useLocation();
+	const filter = location.state;
 
 	useEffect(() => {
-		console.log("rerender");
-		if (filter !== "") {
+		console.log(filter);
+		if (filter) {
 			getFilteredPosts(filter).then((data) => updatePosts(data));
+			console.log(posts);
 		} else {
 			getPosts().then((data) => updatePosts(data));
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filter]);
 
 	function handleUpdateScore(post, value) {

@@ -14,17 +14,17 @@ let postData = [
 	{
 		id: "axsdfajfkd;as12fj;alkd318",
 		title: "Sour Dough",
-		date: new Date().toLocaleString(),
+		date: new Date(),
 		author: "YeastOverLord",
 		content: "I like sour dough bread",
 		type: "text",
-		score: 0,
+		score: 4,
 		numOfComments: 1,
 	},
 	{
 		id: "axsdfajfkd;a4241adsfqjbja",
 		title: "My first attempt at baking",
-		date: new Date().toLocaleString(),
+		date: new Date(),
 		author: "YaBoiBread",
 		content: "I tried to make some bread",
 		type: "text",
@@ -37,7 +37,7 @@ let commentData = [
 	{
 		id: "fdeajdfk;j812094fkfad",
 		postID: "axsdfajfkd;as12fj;alkd318",
-		date: new Date().toLocaleString(),
+		date: new Date(),
 		author: "PastryChef32",
 		content: "Nice",
 		score: 0,
@@ -45,7 +45,7 @@ let commentData = [
 	{
 		id: "jfajd;sfe71380cmzhyek",
 		postID: "axsdfajfkd;a4241adsfqjbja",
-		date: new Date().toLocaleString(),
+		date: new Date(),
 		author: "Dough_Fan29",
 		content: "Looks great",
 		score: 0,
@@ -199,13 +199,41 @@ app.get("/posts", (req, res) => {
 
 app.get("/posts/:filter", (req, res) => {
 	const { filter } = req.params;
-	let filteredPosts = postData.filter(
-		(p) =>
-			p.title.includes(filter) ||
-			p.content.includes(filter) ||
-			p.author.toLowerCase() === filter.toLowerCase()
-	);
-	filteredPosts = filteredPosts.sort((a, b) => b.score - a.score);
+	const now = new Date();
+	let filteredPosts = [];
+	switch (filter) {
+		case "popular":
+			filteredPosts = postData.sort((a, b) => {
+				if (
+					Math.abs(a.date.getTime() - now.getTime()) / (60 * 60 * 1000) >
+					24
+				) {
+					console.log(a.title);
+					return 2;
+				}
+				if (a.score > b.score) {
+					return -1;
+				} else {
+					return 1;
+				}
+			});
+			break;
+		case "new":
+			filteredPosts = postData.sort(
+				(a, b) => b.date.getTime() - a.date.getTime()
+			);
+			break;
+		default:
+			filteredPosts = postData
+				.filter(
+					(p) =>
+						p.title.includes(filter) ||
+						p.content.includes(filter) ||
+						p.author.toLowerCase() === filter.toLowerCase()
+				)
+				.sort((a, b) => b.score - a.score);
+			break;
+	}
 	res.send(filteredPosts);
 });
 

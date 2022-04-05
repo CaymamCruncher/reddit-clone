@@ -1,11 +1,4 @@
-import {
-	Fragment,
-	React,
-	useEffect,
-	useContext,
-	useState,
-	useRef,
-} from "react";
+import { Fragment, React, useEffect, useContext, useRef } from "react";
 import PostDashboard from "./components/PostDashboard";
 import PostView from "./components/PostView";
 import Login from "./components/Login";
@@ -15,12 +8,12 @@ import { checkForUser } from "./utils/api";
 import { ReactComponent as SearchIcon } from "./images/search.svg";
 import "./styles/css/App.css";
 import { UserContext } from "./context/UserContext";
-import { Route, Link, Routes } from "react-router-dom";
+import { Route, Link, Routes, useNavigate } from "react-router-dom";
 
 function App() {
 	const { updateUser, user } = useContext(UserContext);
-	const [search, updateSearch] = useState("");
 	const searchText = useRef(null);
+	const navigate = useNavigate();
 	useEffect(() => {
 		if (user.id === "Guest") {
 			updateUser({
@@ -54,23 +47,29 @@ function App() {
 					<form
 						onSubmit={(e) => {
 							e.preventDefault();
-							updateSearch(searchText.current.value);
+							navigate("/", {
+								state: searchText.current.value,
+							});
 						}}
 					>
 						<input placeholder="Search" ref={searchText} />
-						<button>
+						<button type="submit">
 							<SearchIcon />
 						</button>
 					</form>
-					<a href="/">Popular</a>
-					<a href="/">New</a>
+					<Link to="/" state={"popular"}>
+						Popular
+					</Link>
+					<Link to="/" state={"new"}>
+						New
+					</Link>
 					<Link to="/login">Login</Link>
 					<Link to="/addpost">Add Post</Link>
 				</nav>
 			</header>
 			<main className="container">
 				<Routes>
-					<Route exact path="/" element={<PostDashboard filter={search} />} />
+					<Route exact path="/" element={<PostDashboard />} />
 					<Route exact path="/posts/:id" element={<PostView />} />
 					<Route path="/posts/:id/edit" element={<EditPost />} />
 					<Route path="/login" element={<Login />} />
