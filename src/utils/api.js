@@ -11,7 +11,7 @@ export function getPosts() {
 }
 
 export function getFilteredPosts(filter) {
-	return fetch(`${url}/posts/${filter}`, { headers })
+	return fetch(`${url}/posts/filtered/${filter}`, { headers })
 		.then((res) => res.json())
 		.catch((err) => console.warn(err));
 }

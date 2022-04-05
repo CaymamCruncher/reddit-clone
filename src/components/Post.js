@@ -13,7 +13,6 @@ function Post(props) {
 	useEffect(() => {
 		try {
 			let toggleComment = location.state;
-			console.log(location);
 			if (toggleComment) {
 				toggleAddComment();
 			}

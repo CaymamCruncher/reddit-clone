@@ -197,7 +197,7 @@ app.get("/posts", (req, res) => {
 	res.send(postData);
 });
 
-app.get("/posts/:filter", (req, res) => {
+app.get("/posts/filtered/:filter", (req, res) => {
 	const { filter } = req.params;
 	const now = new Date();
 	let filteredPosts = [];

@@ -24,7 +24,7 @@ function PostView(props) {
 		return () => {
 			isMounted = false;
 		};
-	}, [id, post]);
+	}, [id]);
 
 	function handleUpdateScore(post, value) {
 		if (user.id !== "Guest") {
