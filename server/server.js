@@ -205,8 +205,7 @@ app.get("/posts/filtered/:filter", (req, res) => {
 	switch (filter) {
 		case "popular":
 			filteredPosts = postData.sort((a, b) => {
-				if (Math.abs(a.date - now) / (60 * 60 * 1000) > 24) {
-					console.log(a.title);
+				if (a.date.diff(now, ["days"]).as("days") >= 1) {
 					return 2;
 				}
 				if (a.score > b.score) {
@@ -217,7 +216,9 @@ app.get("/posts/filtered/:filter", (req, res) => {
 			});
 			break;
 		case "new":
-			filteredPosts = postData.sort((a, b) => b.date - a.date);
+			filteredPosts = postData.sort((a, b) =>
+				b.date.diff(a.date, ["seconds"]).as("seconds")
+			);
 			break;
 		default:
 			filteredPosts = postData
@@ -240,7 +241,8 @@ app.get("/posts/:id", (req, res) => {
 });
 
 app.post("/posts", (req, res) => {
-	const post = req.body;
+	let post = req.body;
+	post.date = DateTime.now();
 	const { accessToken, refreshToken } = req.cookies.jwt;
 	const authentication = authenticateUser(
 		accessToken,

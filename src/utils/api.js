@@ -31,6 +31,7 @@ export function getComments(id) {
 }
 
 export function addPost(post) {
+	console.log(post);
 	return fetch(`${url}/posts`, {
 		method: "POST",
 		body: JSON.stringify(post),
