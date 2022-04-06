@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { addPost } from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import { DateTime } from "luxon";
 
 function AddPost() {
 	const [title, updateTitle] = useState("");
@@ -16,7 +17,7 @@ function AddPost() {
 		const post = {
 			id: Math.floor(Math.random() * 10000).toString(),
 			title,
-			date: new Date().toLocaleString(),
+			date: DateTime.now(),
 			author: user.name,
 			content,
 			type,

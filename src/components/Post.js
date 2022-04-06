@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
+import { calculateTime } from "../utils/api";
 import { ReactComponent as Comment } from "../images/comment.svg";
 import { ReactComponent as Upvote } from "../images/upvote.svg";
 import { ReactComponent as Downvote } from "../images/downvote.svg";
@@ -8,8 +9,12 @@ import { ReactComponent as Edit } from "../images/edit.svg";
 
 function Post(props) {
 	const { post, updateScore, toggleAddComment } = props;
+	const [time, updateTime] = useState({ value: "", type: "" });
 	const { user } = useContext(UserContext);
 	const location = useLocation();
+	useEffect(() => {
+		updateTime(calculateTime(post.date));
+	}, [post]);
 	useEffect(() => {
 		try {
 			let toggleComment = location.state;
@@ -28,7 +33,7 @@ function Post(props) {
 			</h2>
 			{post.type === "img" && <img alt={post.title} src="/placeholder.jpg" />}
 			<small>
-				Posted by {post.author} on {post.date}{" "}
+				Posted by {post.author} {time.value} {time.type} ago
 			</small>
 			{post.edited && (
 				<small>

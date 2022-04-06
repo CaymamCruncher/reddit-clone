@@ -2,6 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { UserContext } from "../context/UserContext";
 import { addComment } from "../utils/api";
 import { useNavigate } from "react-router-dom";
+import { DateTime } from "luxon";
 
 function AddComment(props) {
 	const [content, updateContent] = useState("");
@@ -14,7 +15,7 @@ function AddComment(props) {
 		const comment = {
 			id: Math.floor(Math.random() * 10000).toString(),
 			postID: post.id,
-			date: new Date().toLocaleString(),
+			date: DateTime.now(),
 			author: user.name,
 			content,
 			score: 0,

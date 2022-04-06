@@ -3,6 +3,7 @@ const cors = require("cors");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
+const { DateTime } = require("luxon");
 const port = process.env.PORT || 5000;
 const app = express();
 app.use(cookieParser());
@@ -14,7 +15,7 @@ let postData = [
 	{
 		id: "axsdfajfkd;as12fj;alkd318",
 		title: "Sour Dough",
-		date: new Date(),
+		date: DateTime.now(),
 		author: "YeastOverLord",
 		content: "I like sour dough bread",
 		type: "text",
@@ -24,7 +25,7 @@ let postData = [
 	{
 		id: "axsdfajfkd;a4241adsfqjbja",
 		title: "My first attempt at baking",
-		date: new Date(),
+		date: DateTime.now(),
 		author: "YaBoiBread",
 		content: "I tried to make some bread",
 		type: "text",
@@ -37,7 +38,7 @@ let commentData = [
 	{
 		id: "fdeajdfk;j812094fkfad",
 		postID: "axsdfajfkd;as12fj;alkd318",
-		date: new Date(),
+		date: DateTime.now(),
 		author: "PastryChef32",
 		content: "Nice",
 		score: 0,
@@ -45,7 +46,7 @@ let commentData = [
 	{
 		id: "jfajd;sfe71380cmzhyek",
 		postID: "axsdfajfkd;a4241adsfqjbja",
-		date: new Date(),
+		date: DateTime.now(),
 		author: "Dough_Fan29",
 		content: "Looks great",
 		score: 0,
@@ -199,15 +200,12 @@ app.get("/posts", (req, res) => {
 
 app.get("/posts/filtered/:filter", (req, res) => {
 	const { filter } = req.params;
-	const now = new Date();
+	const now = DateTime.now();
 	let filteredPosts = [];
 	switch (filter) {
 		case "popular":
 			filteredPosts = postData.sort((a, b) => {
-				if (
-					Math.abs(a.date.getTime() - now.getTime()) / (60 * 60 * 1000) >
-					24
-				) {
+				if (Math.abs(a.date - now) / (60 * 60 * 1000) > 24) {
 					console.log(a.title);
 					return 2;
 				}
@@ -219,9 +217,7 @@ app.get("/posts/filtered/:filter", (req, res) => {
 			});
 			break;
 		case "new":
-			filteredPosts = postData.sort(
-				(a, b) => b.date.getTime() - a.date.getTime()
-			);
+			filteredPosts = postData.sort((a, b) => b.date - a.date);
 			break;
 		default:
 			filteredPosts = postData

@@ -1,3 +1,5 @@
+import { DateTime } from "luxon";
+
 const headers = {
 	Accept: "application/json",
 	"Content-Type": "application/json",
@@ -52,6 +54,28 @@ export function editPost(post, user) {
 	})
 		.then((res) => res.json())
 		.catch((err) => console.warn(err));
+}
+
+export function calculateTime(time) {
+	let now = DateTime.now();
+	now.setLocale("en-US");
+	let diff = now.diff(DateTime.fromISO(time), ["seconds"]);
+	if (diff.as("years") >= 1) {
+		diff = { type: "years", value: parseInt(diff.as("years")) };
+	} else if (diff.as("months") >= 1) {
+		diff = { type: "months", value: parseInt(diff.as("months")) };
+	} else if (diff.as("weeks") >= 1) {
+		diff = { type: "weeks", value: parseInt(diff.as("weeks")) };
+	} else if (diff.as("days") >= 1) {
+		diff = { type: "days", value: parseInt(diff.as("days")) };
+	} else if (diff.as("hours") >= 1) {
+		diff = { type: "hours", value: parseInt(diff.as("hours")) };
+	} else if (diff.as("minutes") >= 1) {
+		diff = { type: "minutes", value: parseInt(diff.as("minutes")) };
+	} else {
+		diff = { type: "seconds", value: parseInt(diff.as("seconds")) };
+	}
+	return diff;
 }
 
 export function checkForUser() {
