@@ -300,6 +300,8 @@ app.post("/posts/:id/comments", (req, res) => {
 app.put("/posts/:id", (req, res) => {
 	let editedPost = req.body.post;
 	let user = req.body.user;
+	editedPost.date = DateTime.fromISO(editedPost.date);
+	editedPost.editedOn = DateTime.now();
 	let author = users.find((u) => u.id === user.id);
 	if (author.username === editedPost.author || author.id === "admin_account") {
 		postData = postData.map((post) =>

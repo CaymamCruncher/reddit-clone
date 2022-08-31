@@ -23,7 +23,6 @@ function EditPost(props) {
 			score: post.score,
 			numOfComments: post.numOfComments,
 			edited: user.name,
-			editedOn: new Date().toLocaleString(),
 		};
 		editPost(editedPost, user).then((res) => {
 			console.log(res);

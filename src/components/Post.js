@@ -10,10 +10,14 @@ import { ReactComponent as Edit } from "../images/edit.svg";
 function Post(props) {
 	const { post, updateScore, toggleAddComment } = props;
 	const [time, updateTime] = useState({ value: "", type: "" });
+	const [editTime, updateEditTime] = useState({ value: "", type: "" });
 	const { user } = useContext(UserContext);
 	const location = useLocation();
 	useEffect(() => {
 		updateTime(calculateTime(post.date));
+		if (post.editedOn) {
+			updateEditTime(calculateTime(post.editedOn));
+		}
 	}, [post]);
 	useEffect(() => {
 		try {
@@ -37,7 +41,7 @@ function Post(props) {
 			</small>
 			{post.edited && (
 				<small>
-					Edited by {post.edited} on {post.editedOn}
+					Edited by {post.edited} {editTime.value} {editTime.type} ago
 				</small>
 			)}
 			<p>{post.content}</p>
